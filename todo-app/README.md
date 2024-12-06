@@ -56,14 +56,50 @@ A To-Do List application built using React for the frontend and Spring Boot for 
 
 ## Testing
 
-### Backend
+## Backend
 Run the backend tests with:
-2. Install dependencies:
    ```bash
-   npm install
-3. Start th
+   ./mvnw test
+   ```
+
+## Frontend
+Run the frontend tests with:
+   ```bash
+   npm test
+   ```
+
+## Deployment
+
+### Backend
+- Deploy the Spring Boot backend to **Render**:
+  1. Create a new Web Service in Render.
+  2. Connect your GitHub repository and select the backend directory.
+  3. Use the following build and start commands:
+     - Build: `./mvnw clean install`
+     - Start: `java -jar target/<your-backend-jar>.jar`
 
 ### Frontend
-Run the frontend tests with:
-```bash
-npm test
+- Deploy the React frontend to **Netlify**:
+  1. Log in to your Netlify account.
+  2. Drag and drop the build folder (generated with `npm run build`).
+  3. Configure the Netlify site settings if needed.
+
+## Additional Notes
+- Ensure both the frontend and backend are running simultaneously to test the full application functionality.
+- The frontend is configured to make API requests to `http://localhost:8080/api`. If deploying to a remote server, update the `baseURL` in `axiosConfig.js` accordingly.
+- Remember to install all required dependencies before running the application:
+  - For the backend: `./mvnw install`
+  - For the frontend: `npm install`
+- Test the application thoroughly, including:
+  - CRUD operations for tasks.
+  - Filters for viewing All, Completed, and Pending tasks.
+  - Switching between Light and Dark themes.
+  - Responsiveness on different devices.
+
+## Author
+Juan Jose Trujillo Cardozo  
+- Email: juanjosetrujillocardozo@gmail.com  
+- GitHub: [https://github.com/juanjosetrujillocardozo](https://github.com/juanjosetrujillocardozo)
+
+## License
+This project is licensed under the MIT License. You are free to use, modify, and distribute this project, provided proper attribution is given.
