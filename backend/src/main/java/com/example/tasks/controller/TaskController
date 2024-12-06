@@ -39,6 +39,7 @@ public class TaskController {
         existingTask.setTitle(task.getTitle());
         existingTask.setDescription(task.getDescription());
         existingTask.setCompleted(task.isCompleted());
+        existingTask.setOrder(task.getOrder());
         return taskService.save(existingTask);
     }
 

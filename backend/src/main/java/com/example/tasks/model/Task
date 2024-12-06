@@ -22,4 +22,8 @@ public class Task {
 
     @Column(nullable = false)
     private boolean completed = false;
+
+    @Column(nullable = false)
+    private int order;
+
 }
