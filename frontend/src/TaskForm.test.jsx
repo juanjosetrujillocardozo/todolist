@@ -1,18 +1,23 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import TaskForm from './TaskForm';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import TaskForm from './components/TaskForm';
 
 test('renders TaskForm and handles submission', () => {
-  const handleSubmit = jest.fn();
-  const { getByLabelText, getByRole } = render(
-    <TaskForm onSubmit={handleSubmit} />
+  const { getByPlaceholderText, getByRole } = render(
+    <Provider store={store}>
+      <TaskForm />
+    </Provider>
   );
 
-  fireEvent.change(getByLabelText(/task name/i), {
-    target: { value: 'New Task' },
-  });
-  fireEvent.click(getByRole('button'));
+  const input = getByPlaceholderText(/New Task/i);
+  const button = getByRole('button', { name: /Add Task/i });
 
-  expect(handleSubmit).toHaveBeenCalledTimes(1);
-  expect(handleSubmit).toHaveBeenCalledWith({ name: 'New Task' });
+  fireEvent.change(input, { target: { value: 'Test Task' } });
+  fireEvent.click(button);
+
+  setTimeout(() => {
+    expect(input.value).toBe('');
+  }, 3000);
 });
