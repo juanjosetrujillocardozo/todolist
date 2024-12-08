@@ -1,36 +1,55 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import instance from '../axiosConfig';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import instance from "../axiosConfig";
 
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
-  const response = await instance.get('/tasks');
+// Thunk to fetch tasks from the backend
+export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
+  const response = await instance.get("/tasks");
   return response.data;
 });
 
-export const createTask = createAsyncThunk('tasks/createTask', async (task) => {
-  const response = await instance.post('/tasks', task);
+// Thunk to create a new task
+export const createTask = createAsyncThunk("tasks/createTask", async (task) => {
+  const response = await instance.post("/tasks", task);
   return response.data;
 });
 
+// Thunk to toggle task completion
+export const toggleTask = createAsyncThunk("tasks/toggleTask", async (taskId) => {
+  const response = await instance.put(`/tasks/${taskId}/toggle`);
+  return response.data;
+});
+
+// Thunk to delete a task
+export const deleteTask = createAsyncThunk("tasks/deleteTask", async (taskId) => {
+  await instance.delete(`/tasks/${taskId}`);
+  return taskId;
+});
+
+// Slice definition
 const taskSlice = createSlice({
-  name: 'tasks',
+  name: "tasks",
   initialState: [],
-  reducers: {
-    toggleTask(state, action) {
-      const task = state.find((t) => t.id === action.payload);
-      if (task) task.completed = !task.completed;
-    },
-    deleteTask(state, action) {
-      return state.filter((t) => t.id !== action.payload);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
+      // Fetch tasks
       .addCase(fetchTasks.fulfilled, (state, action) => action.payload)
+      // Create task
       .addCase(createTask.fulfilled, (state, action) => {
         state.push(action.payload);
+      })
+      // Toggle task
+      .addCase(toggleTask.fulfilled, (state, action) => {
+        const index = state.findIndex((task) => task.id === action.payload.id);
+        if (index !== -1) {
+          state[index] = action.payload;
+        }
+      })
+      // Delete task
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        return state.filter((task) => task.id !== action.payload);
       });
   },
 });
 
-export const { toggleTask, deleteTask } = taskSlice.actions;
 export default taskSlice.reducer;

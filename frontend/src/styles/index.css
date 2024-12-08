@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles for additional enhancements */
+body {
+    font-family: 'Inter', sans-serif;
+    @apply bg-gray-100 text-gray-800 antialiased;
+}
+
+button {
+  @apply transition duration-300 ease-in-out;
+}
+
+input:focus {
+  @apply outline-none ring-2 ring-blue-400;
+}

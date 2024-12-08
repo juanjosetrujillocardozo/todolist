@@ -1,6 +1,5 @@
-import { configureStore, createStore } from '@reduxjs/toolkit';
-import taskReducer from './taskSlice'; // Cambiado para usar el archivo correcto
-
+import { configureStore } from "@reduxjs/toolkit";
+import taskReducer from "./taskSlice";
 
 const store = configureStore({
   reducer: {
@@ -9,5 +8,3 @@ const store = configureStore({
 });
 
 export default store;
-
-/*createStore(taskReducer);*/
