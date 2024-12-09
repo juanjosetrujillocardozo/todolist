@@ -1,15 +1,32 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import configureStore from 'redux-mock-store';
 import App from './App';
 
-test('renders Todo App heading', () => {
-  render(
+const mockStore = configureStore([]);
+
+test('renders App and checks for main elements', () => {
+  const store = mockStore({
+    tasks: [
+      { id: 1, title: 'Task 1', description: 'Test Task 1', completed: false },
+      { id: 2, title: 'Task 2', description: 'Test Task 2', completed: true },
+    ],
+  });
+
+  const { getByText, getByRole } = render(
     <Provider store={store}>
       <App />
     </Provider>
   );
-  const heading = screen.getByText(/Todo App/i);
-  expect(heading).toBeInTheDocument();
+
+  // Validates header rendering
+  expect(getByText(/Todo App/i)).toBeInTheDocument();
+
+  // Validates form rendering
+  expect(getByRole('button', { name: /Add Task/i })).toBeInTheDocument();
+
+  // Validates task list rendering
+  expect(getByText(/Task 1/i)).toBeInTheDocument();
+  expect(getByText(/Task 2/i)).toBeInTheDocument();
 });

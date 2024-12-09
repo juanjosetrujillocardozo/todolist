@@ -21,23 +21,31 @@ public class TaskService {
     }
 
     public Task getTaskById(Long id) {
-        Optional<Task> task = taskRepository.findById(id);
-        return task.orElse(null);
+        return taskRepository.findById(id).orElse(null);
     }
 
     public Task createTask(Task task) {
         return taskRepository.save(task);
     }
 
-    public Task updateTask(Long id, Task updatedTask) {
-        Optional<Task> existingTaskOptional = taskRepository.findById(id);
+    public Task updateTask(Long id, Task taskDetails) {
+        Optional<Task> taskOptional = taskRepository.findById(id);
+        if (taskOptional.isPresent()) {
+            Task task = taskOptional.get();
+            task.setTitle(taskDetails.getTitle());
+            task.setDescription(taskDetails.getDescription());
+            task.setCompleted(taskDetails.isCompleted());
+            return taskRepository.save(task);
+        }
+        return null;
+    }
 
-        if (existingTaskOptional.isPresent()) {
-            Task existingTask = existingTaskOptional.get();
-            existingTask.setTitle(updatedTask.getTitle());
-            existingTask.setDescription(updatedTask.getDescription());
-            existingTask.setCompleted(updatedTask.isCompleted());
-            return taskRepository.save(existingTask);
+    public Task toggleTask(Long id) {
+        Optional<Task> taskOptional = taskRepository.findById(id);
+        if (taskOptional.isPresent()) {
+            Task task = taskOptional.get();
+            task.setCompleted(!task.isCompleted());
+            return taskRepository.save(task);
         }
         return null;
     }

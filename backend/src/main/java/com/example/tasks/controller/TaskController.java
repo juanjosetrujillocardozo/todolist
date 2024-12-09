@@ -48,6 +48,15 @@ public class TaskController {
         return ResponseEntity.ok(updatedTask);
     }
 
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<Task> toggleTask(@PathVariable Long id) {
+        Task toggledTask = taskService.toggleTask(id);
+        if (toggledTask == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(toggledTask);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         boolean isDeleted = taskService.deleteTask(id);
